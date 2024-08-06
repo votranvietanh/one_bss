@@ -186,8 +186,9 @@ GROUP BY
         END
  )
      SELECT 
-    TEN_LOAIHD,
-    c.nhom_dichvu ,--a.LOAIHINH_TB,
+    TEN_LOAIHD
+    ,c.nhom_dichvu 
+    ,a.LOAIHINH_TB,
     CASE 
         WHEN a.Dinh_nghia = 'SDM' THEN 'DCD0A1VNTVNT008'
         ELSE b.MA_DTHU
