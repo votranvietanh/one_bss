@@ -147,10 +147,10 @@ SELECT
    
     , 
     case 
-            when tenchuquan LIKE '%Ph_ M_ H_ng%' then 'Phu My Hung' 
+        when tenchuquan LIKE '%Ph_ M_ H_ng%' then 'Phu My Hung' 
         when dichvuvt_id in (7,8,9) then 'TSL'
         when dichvuvt_id in (1,11,4,12 ) then'CD'
-        else 'unknown'
+         else null
      end as dich_vu
      
 FROM 
@@ -168,7 +168,7 @@ GROUP BY
             WHEN tenchuquan LIKE '%Ph_ M_ H_ng%' THEN 'Phu My Hung' 
             WHEN dichvuvt_id IN (7, 8, 9) THEN 'TSL'
             WHEN dichvuvt_id IN (1, 11, 4, 12) THEN 'CD'
-             else 'unknown'
+             else null
         END
  , CASE 
             WHEN MA_LOAIHD IN ('THAYDOI_DV', 'DOITOCDO_ADSL') THEN 'SDM'
@@ -183,7 +183,7 @@ GROUP BY
         ELSE b.MA_DTHU
     END AS ma_doanh_thu
     , SO_LUONG, TIEN_THU_TRONG_THANG, VAT_THU_TRONG_THANG, TONG_THU_TRONG_THANG, TIEN_THU_THANG_TRUOC, VAT_THU_THANG_TRUOC, TONG_THU_THANG_TRUOC
-    ,dich_vu, TIEN_THU, VAT_THU, TONG_THU
+    , TIEN_THU, VAT_THU, TONG_THU ,nvl(dich_vu,c.GTGT_CNTT)
     
 FROM 
     KQ a
@@ -191,4 +191,9 @@ LEFT JOIN
     vietanhvh.dm_ma_doanhthu b 
 ON 
     a.loaihinh_tb = b.loaihinh_tb
+LEFT JOIN
+    ttkd_bsc.DM_LOAIHINH_HSQD c
+ON 
+    a.loaihinh_tb = c.loaihinh_tb
+
      ;
