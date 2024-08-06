@@ -30,7 +30,7 @@ std_onebss AS (
        b.loaitb_id, a.ma_gd, b.hdtb_id, b.thuebao_id, b.ma_tb, a.loaihd_id, b.kieuld_id, 
         a.ngay_yc, b.ngay_ht, a.ctv_id, a.nhanviengt_id, d.ngay_tt, 
         c.tien_thu tien, c.vat_thu vat, c.km_lapdat, c.vat_km,c.khoanmuctt_id,
-        d.thungan_tt_id, d.ht_tra_id, d.kenhthu_id, d.trangthai, cq.tenchuquan,cq.chuquan_id
+        d.thungan_tt_id, d.ht_tra_id, d.kenhthu_id, d.trangthai, cq.tenchuquan,cq.chuquan_id,b.tthd_id
     FROM 
         css_hcm.hd_khachhang a
     LEFT JOIN 
@@ -45,18 +45,17 @@ std_onebss AS (
         css_hcm.chuquan cq ON cq.chuquan_id = dvu.chuquan_id
     
     WHERE 
-        TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202406
+        TO_NUMBER(TO_CHAR(b.ngay_ht, 'yyyymm')) = 202407
         AND a.loaihd_id IN (1, 3, 8, 6, 7)
         AND b.donvi_id IS NOT NULL
         AND cq.chuquan_id in (145,264,266)
-        AND b.tthd_id in (2,3,4,5,6)
-
+        AND b.tthd_id in (2,3,4,5,6)        
 )
 
 ,
 x_onebss AS (
     SELECT 
-        a.loaihd_id,a.kieuld_id,a.trangthai,a.khoanmuctt_id,dv.dichvuvt_id,a.loaitb_id, q.loaihinh_tb,a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD, 
+        a.tthd_id,a.loaihd_id,a.kieuld_id,a.trangthai,a.khoanmuctt_id,dv.dichvuvt_id,a.loaitb_id, q.loaihinh_tb,a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD, 
         b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht, d.ten_nv, m.ten_dv, 
          a.ngay_tt, round(sum(a.tien)) tien, round(sum(a.vat)) vat, round(sum(a.km_lapdat)) km_lapdat, 
         round(sum(a.vat_km)) vat_km,
@@ -86,7 +85,10 @@ x_onebss AS (
         css_hcm.loaihinh_tb q ON q.loaitb_id = a.loaitb_id
      LEFT JOIN 
          css_hcm.dichvu_vt dv on q.dichvuvt_id =dv.dichvuvt_id
-         group by a.HDTB_ID,dv.dichvuvt_id,q.loaihinh_tb, a.loaitb_id, a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD, 
+ --dieu kien o day, tuy vao loai form bao cao
+    WHERE a.tthd_id = 6 AND a.trangthai = 1 
+ --
+    GROUP BY a.tthd_id,a.HDTB_ID,dv.dichvuvt_id,q.loaihinh_tb, a.loaitb_id, a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD, 
         b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht, d.ten_nv, m.ten_dv, 
        a.ngay_tt, h.ht_tra, i.KENHTHU, a.khoanmuctt_id, a.trangthai,a.kieuld_id,a.loaihd_id
        ,
