@@ -2,11 +2,11 @@ WITH ct AS (
     SELECT 
           khoanmuctt_id,
         hdtb_id,
-        phieutt_id, tien tien_thu , vat vat_thu
---        SUM(CASE WHEN khoanmuctt_id = 19 THEN tien ELSE 0 END) km_lapdat, 
---        SUM(CASE WHEN khoanmuctt_id = 19 THEN vat ELSE 0 END) vat_km,
---        SUM(CASE WHEN khoanmuctt_id NOT IN (19, 11, 5, 29,21) THEN tien ELSE 0 END) tien_thu,
---        SUM(CASE WHEN khoanmuctt_id NOT IN (19, 11, 5, 29,21) THEN vat ELSE 0 END) vat_thu
+        phieutt_id, 
+        SUM(CASE WHEN khoanmuctt_id = 19 THEN tien ELSE 0 END) km_lapdat, 
+        SUM(CASE WHEN khoanmuctt_id = 19 THEN vat ELSE 0 END) vat_km,
+        SUM(CASE WHEN khoanmuctt_id NOT IN (19, 11, 5, 29,21) THEN tien ELSE 0 END) tien_thu,
+        SUM(CASE WHEN khoanmuctt_id NOT IN (19, 11, 5, 29,21) THEN vat ELSE 0 END) vat_thu
     FROM css_hcm.ct_phieutt
     GROUP BY hdtb_id, phieutt_id, khoanmuctt_id
 )
