@@ -186,7 +186,8 @@ GROUP BY
         END
  )
      SELECT 
-    TEN_LOAIHD,a.LOAIHINH_TB,
+    TEN_LOAIHD,
+    c.nhom_dichvu ,--a.LOAIHINH_TB,
     CASE 
         WHEN a.Dinh_nghia = 'SDM' THEN 'DCD0A1VNTVNT008'
         ELSE b.MA_DTHU
@@ -200,4 +201,7 @@ LEFT JOIN
     vietanhvh.dm_ma_doanhthu b 
 ON 
     a.loaihinh_tb = b.loaihinh_tb
+LEFT JOIN
+    ttkd_bsc.DM_LOAIHINH_HSQD c
+ON a.loaihinh_tb = c.loaihinh_tb
      ;
