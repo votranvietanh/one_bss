@@ -148,12 +148,14 @@ SELECT
             when tenchuquan LIKE '%Ph_ M_ H_ng%' then 'Phu My Hung' 
         when dichvuvt_id in (7,8,9) then 'TSL'
         when dichvuvt_id in (1,11,4,12 ) then'CD'
+        else 'unknown'
      end as dich_vu
      
 FROM 
     x_onebss
     
-    where dichvuvt_id in (7,8,9,1,11,4,12)
+    --lua chon dich_vu
+--    where dichvuvt_id in (7,8,9,1,11,4,12)
     
 
 
@@ -164,6 +166,7 @@ GROUP BY
             WHEN tenchuquan LIKE '%Ph_ M_ H_ng%' THEN 'Phu My Hung' 
             WHEN dichvuvt_id IN (7, 8, 9) THEN 'TSL'
             WHEN dichvuvt_id IN (1, 11, 4, 12) THEN 'CD'
+             else 'unknown'
         END
  , CASE 
             WHEN MA_LOAIHD IN ('THAYDOI_DV', 'DOITOCDO_ADSL') THEN 'SDM'
