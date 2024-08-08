@@ -1,3 +1,4 @@
+--#CHECKED
 WITH ct AS (
     SELECT 
         khoanmuctt_id,
@@ -45,7 +46,7 @@ std_onebss AS (
         css_hcm.chuquan cq ON cq.chuquan_id = dvu.chuquan_id
     
     WHERE 
-        TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202406
+        TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202406 -- <<= dùng ngay_ins chứ ko dùng ngay_ht vì hiện tại trog db ngay_ht bị sai
         AND a.loaihd_id IN (1, 3, 8, 6, 7)
         AND b.donvi_id IS NOT NULL
         AND dvu.chuquan_id in (145,264,266)
@@ -101,6 +102,6 @@ where
     --FORM_1:
 hdtb_id in (select hdtb_id  from x_cd_fiber_1bss) --check data cua KHKT
 and tthd_id = 6 --Da hoan tat
-and chuquan_id <> 264 -- ko tinh PhuMyHung
+and chuquan_id <> 264 -- ko tinh PhuMyHung, nếu để check tổng tiền vs file khkt thì cmt dòng này
     --
 );
