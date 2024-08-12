@@ -45,7 +45,7 @@ std_onebss AS (
         css_hcm.chuquan cq ON cq.chuquan_id = dvu.chuquan_id
     
     WHERE 
-        TO_NUMBER(TO_CHAR(b.ngay_ht, 'yyyymm')) = 202407
+        TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202406
         AND a.loaihd_id IN (1, 3, 8, 6, 7)
         AND b.donvi_id IS NOT NULL
         AND cq.chuquan_id in (145,264,266)
@@ -64,7 +64,8 @@ x_onebss AS (
         h.ht_tra, i.KENHTHU, 
         CASE 
             WHEN a.trangthai = 1 THEN 'Da thu tien'
-            WHEN a.trangthai = 0 THEN 'Chua thu tien' 
+            ELSE  'Chua thu tien' 
+
         END AS trangthai_tt,
         a.tenchuquan
     FROM 
@@ -94,7 +95,7 @@ x_onebss AS (
        ,
         CASE 
             WHEN a.trangthai = 1 THEN 'Da thu tien'
-            WHEN a.trangthai = 0 THEN 'Chua thu tien' 
+            ELSE  'Chua thu tien' 
         END ,
         a.tenchuquan
 )
@@ -120,28 +121,28 @@ SELECT
     SUM(vat) + SUM(vat_km) AS vat_thu,
     (SUM(vat) + SUM(vat_km)+SUM(tien) + SUM(km_lapdat)) tong_thu,
      SUM(CASE 
-            WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202407 THEN tien + km_lapdat
+            WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202406 THEN tien + km_lapdat
             ELSE 0 
         END) AS tien_thu_trong_thang,
         SUM(CASE 
-            WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202407 THEN vat + vat_km
+            WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202406 THEN vat + vat_km
             ELSE 0 
         END) AS vat_thu_trong_thang,
         SUM(CASE 
-            WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202407 THEN vat + vat_km + tien + km_lapdat
+            WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202406 THEN vat + vat_km + tien + km_lapdat
             ELSE 0 
         END) AS tong_thu_trong_thang
         ,
         SUM(CASE 
-            WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202407 and trangthai= 1 THEN tien + km_lapdat
+            WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202406 and trangthai= 1 THEN tien + km_lapdat
             ELSE 0 
         END) AS tien_thu_thang_truoc,
         SUM(CASE 
-            WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202407 and trangthai= 1 THEN vat + vat_km
+            WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202406 and trangthai= 1 THEN vat + vat_km
             ELSE 0 
         END) AS vat_thu_thang_truoc,
         SUM(CASE 
-            WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202407  and trangthai= 1 THEN vat + vat_km + tien + km_lapdat
+            WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202406  and trangthai= 1 THEN vat + vat_km + tien + km_lapdat
             ELSE 0 
         END) AS tong_thu_thang_truoc
         ,
@@ -169,7 +170,8 @@ FROM
     x_onebss
     
     where dichvuvt_id not in (7,8,9,1,11,4,12)
-    
+--        where dichvuvt_id in ( select DICHVUVT_ID from ttkd_bsc.DM_LOAIHINH_HSQD where GTGT_CNTT is not null)
+
 
 
 GROUP BY 
