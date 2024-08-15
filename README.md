@@ -19,8 +19,8 @@ and tthd_id = 6 and dichvuvt_id in (1,4,7,8,10,11,12);
 
 
 1. lệch tiền MN001264250, MN001264239 ( tiền của mình nó da + them ca vat ? ) =>> ra form
-				--select * from x_onebss where ma_tb = 'MN001264250';MN001264250
-                                --select * from css.v_ct_phieutt where hdtb_id ='25442659';
+					select * from x_onebss where ma_tb = 'MN001264250';MN001264250
+	                               	select * from css.v_ct_phieutt where hdtb_id ='25442659';
 
 			**view chenh lech**:
 --select a.ma_tb,a.tien,b.tien,a.tien- b.tien aa ,a.vat-b.vat bb
