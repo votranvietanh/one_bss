@@ -5,10 +5,10 @@ WITH ct AS (
         khoanmuctt_id,
         hdtb_id,
         phieutt_id,
-        SUM(CASE WHEN khoanmuctt_id = 19 THEN tien ELSE 0 END) km_lapdat, 
-        SUM(CASE WHEN khoanmuctt_id = 19 THEN vat ELSE 0 END) vat_km,
-        SUM(CASE WHEN khoanmuctt_id NOT IN (19, 11, 5, 29,21) THEN tien ELSE 0 END) tien_thu,
-        SUM(CASE WHEN khoanmuctt_id NOT IN (19, 11, 5, 29,21) THEN vat ELSE 0 END) vat_thu
+       
+        SUM(tien) tien,
+        SUM(vat) vat
+
     FROM css_hcm.ct_phieutt
     GROUP BY hdtb_id, phieutt_id, khoanmuctt_id
 )
@@ -32,9 +32,16 @@ dich_vu as (
 std_onebss AS (
     SELECT 
        b.tthd_id,b.loaitb_id, a.ma_gd, b.hdtb_id, b.thuebao_id, b.ma_tb, a.loaihd_id, b.kieuld_id, 
-        a.ngay_yc, b.ngay_ht, a.ctv_id, a.nhanviengt_id, d.ngay_tt, 
-        c.tien_thu tien, c.vat_thu vat, c.km_lapdat, c.vat_km,c.khoanmuctt_id,
-        d.thungan_tt_id, d.ht_tra_id, d.kenhthu_id, d.trangthai, cq.tenchuquan,cq.chuquan_id
+        a.ngay_yc, b.ngay_ht, a.ctv_id, a.nhanviengt_id
+        , d.ngay_tt,d.ngay_hd, d.seri, d.soseri
+--        c.tien_thu tien, c.vat_thu vat, c.km_lapdat, c.vat_km
+        ,c.khoanmuctt_id
+        , d.thungan_tt_id, d.ht_tra_id, d.kenhthu_id, d.trangthai, cq.tenchuquan,cq.chuquan_id
+        
+        , CASE WHEN c.khoanmuctt_id = 19 THEN c.tien ELSE 0 END km_lapdat
+        , CASE WHEN c.khoanmuctt_id = 19 THEN c.vat ELSE 0 END vat_km
+        , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.tien ELSE 0 END tien_thu --5 token
+        , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.vat ELSE 0 END vat_thu
     FROM 
         css_hcm.hd_khachhang a
     LEFT JOIN 
@@ -42,15 +49,18 @@ std_onebss AS (
     LEFT JOIN 
         ct c ON b.hdtb_id = c.hdtb_id
     JOIN 
-        css_hcm.phieutt_hd d ON c.phieutt_id = d.phieutt_id AND (c.tien_thu <> 0 OR km_lapdat <> 0)
+        css_hcm.phieutt_hd d ON c.phieutt_id = d.phieutt_id AND (c.tien <> 0)
     LEFT JOIN 
         dich_vu dvu on b.thuebao_id = dvu.thuebao_id
     LEFT JOIN 
         css_hcm.chuquan cq ON cq.chuquan_id = dvu.chuquan_id
     
     WHERE 
-        TO_NUMBER(TO_CHAR(b.ngay_ht, 'yyyymm')) = 202407
-        AND a.loaihd_id IN (1, 3, 6, 7, 8)
+        (TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202407
+            or (d.ngay_tt < trunc(sysdate, 'month')
+                    and nvl(ngay_ht, sysdate) >= trunc(sysdate, 'month')
+                )
+        )
         AND b.donvi_id IS NOT NULL
         AND dvu.chuquan_id in (145,264,266)
         AND b.tthd_id in (2,3,4,5,6)
@@ -61,13 +71,13 @@ std_onebss AS (
 x_onebss AS (
     SELECT 
         a.chuquan_id,a.tthd_id,a.loaihd_id,a.kieuld_id,a.trangthai,a.khoanmuctt_id,dv.dichvuvt_id,a.loaitb_id, q.loaihinh_tb,a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD, 
-        b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht, d.ten_nv, m.ten_dv, 
-         a.ngay_tt, round(sum(a.tien)) tien, round(sum(a.vat)) vat, round(sum(a.km_lapdat)) km_lapdat, 
-        round(sum(a.vat_km)) vat_km,
+        b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht, d.ten_nv, m.ten_dv,s.ten_dv pbh, 
+         a.ngay_tt,a.ngay_hd,a.seri,a.soseri
+        , round(sum(a.tien_thu)) tien, round(sum(a.vat_thu)) vat, round(sum(a.km_lapdat)) km_lapdat, round(sum(a.vat_km)) vat_km,
         h.ht_tra, i.KENHTHU, 
         CASE 
             WHEN a.trangthai = 1 THEN 'Da thu tien'
-            WHEN a.trangthai = 0 THEN 'Chua thu tien' 
+            ELSE  'Chua thu tien'  
         END AS trangthai_tt,
         a.tenchuquan
     FROM 
@@ -90,13 +100,13 @@ x_onebss AS (
         css_hcm.loaihinh_tb q ON q.loaitb_id = a.loaitb_id
      LEFT JOIN 
          css_hcm.dichvu_vt dv on q.dichvuvt_id =dv.dichvuvt_id
-         group by a.chuquan_id, a.tthd_id,a.HDTB_ID,dv.dichvuvt_id,q.loaihinh_tb, a.loaitb_id, a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD, 
-        b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht, d.ten_nv, m.ten_dv, 
-       a.ngay_tt, h.ht_tra, i.KENHTHU, a.khoanmuctt_id, a.trangthai,a.kieuld_id,a.loaihd_id
+     GROUP BY a.tthd_id,a.HDTB_ID,dv.dichvuvt_id,q.loaihinh_tb, a.loaitb_id, a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD, 
+        b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht, d.ten_nv, m.ten_dv,s.ten_dv, 
+       a.ngay_tt,a.ngay_hd,a.seri,a.soseri, h.ht_tra, i.KENHTHU, a.khoanmuctt_id, a.trangthai,a.kieuld_id,a.loaihd_id
        ,
         CASE 
             WHEN a.trangthai = 1 THEN 'Da thu tien'
-            WHEN a.trangthai = 0 THEN 'Chua thu tien' 
+            ELSE  'Chua thu tien' 
         END ,
         a.tenchuquan
 )
