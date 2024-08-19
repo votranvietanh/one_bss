@@ -1,5 +1,4 @@
---#CHECKED
-
+CREATE TABLE x_onebss AS
 WITH ct AS (
     SELECT 
         khoanmuctt_id,
@@ -34,7 +33,6 @@ std_onebss AS (
        b.tthd_id,b.loaitb_id, a.ma_gd, b.hdtb_id, b.thuebao_id, b.ma_tb, a.loaihd_id, b.kieuld_id, 
         a.ngay_yc, b.ngay_ht, a.ctv_id, a.nhanviengt_id
         , d.ngay_tt,d.ngay_hd, d.seri, d.soseri
---        c.tien_thu tien, c.vat_thu vat, c.km_lapdat, c.vat_km
         ,c.khoanmuctt_id
         , d.thungan_tt_id, d.ht_tra_id, d.kenhthu_id, d.trangthai, cq.tenchuquan,cq.chuquan_id
         
@@ -56,7 +54,14 @@ std_onebss AS (
         css_hcm.chuquan cq ON cq.chuquan_id = dvu.chuquan_id
     
     WHERE 
-        (TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202407
+--         -- THANG 6
+--         (TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202406
+--             or (d.ngay_tt < TRUNC(ADD_MONTHS(SYSDATE, -1), 'MONTH')
+--                     and nvl(ngay_ht, sysdate) >= TRUNC(ADD_MONTHS(SYSDATE, -1), 'MONTH')
+--                 )
+--         )
+      --THANG 7 
+      (TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202407
             or (d.ngay_tt < trunc(sysdate, 'month')
                     and nvl(ngay_ht, sysdate) >= trunc(sysdate, 'month')
                 )
@@ -66,11 +71,10 @@ std_onebss AS (
         AND b.tthd_id in (2,3,4,5,6)
 
 )
-
 ,
 x_onebss AS (
-    SELECT 
-        a.chuquan_id,a.tthd_id,a.loaihd_id,a.kieuld_id,a.trangthai,a.khoanmuctt_id,dv.dichvuvt_id,a.loaitb_id, q.loaihinh_tb,a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD, 
+    SELECT
+        a.tthd_id,a.loaihd_id,a.kieuld_id,a.trangthai,a.khoanmuctt_id,dv.dichvuvt_id,a.loaitb_id, q.loaihinh_tb,a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD,
         b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht, d.ten_nv, m.ten_dv,s.ten_dv pbh, 
          a.ngay_tt,a.ngay_hd,a.seri,a.soseri
         , round(sum(a.tien_thu)) tien, round(sum(a.vat_thu)) vat, round(sum(a.km_lapdat)) km_lapdat, round(sum(a.vat_km)) vat_km,
@@ -110,9 +114,4 @@ x_onebss AS (
         END ,
         a.tenchuquan
 )
-select * from x_onebss
-where 
-tthd_id = 6 --Da hoan tat
-and chuquan_id <> 264 -- ko tinh PhuMyHung
-;
-
+select * from x_onebss;
