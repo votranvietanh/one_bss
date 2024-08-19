@@ -5,6 +5,7 @@ WITH x_onebss1 AS (
       AND trangthai = 1
       AND loaitb_id NOT IN (2116, 147, 39, 290, 175, 122)
       AND MA_LOAIHD not like '%DATCOC%'
+      AND KHOANMUCTT_ID <> 11
 ),
 KQ AS (
     SELECT
