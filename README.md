@@ -16,7 +16,8 @@
 				and loaitb_id not in (2116,147,39,290,175,122)
 **3.499 recs**
 
-				where loaitb_id not in (2116,147,39,290,175,122) -- dk chi Huong
+				where 
+    				AND loaitb_id not in (2116,147,39,290,175,122,319,208)  -- dk chi Huong
 				and dichvuvt_id not in (1,4,7,8,10,11,12)
 				and khoanmuctt_id in (1,5,52,142); -- form 3;
 
