@@ -1,4 +1,3 @@
-
 with x_onebss1 as (
         select * from x_onebss a
         where tthd_id = 6 
@@ -6,6 +5,7 @@ with x_onebss1 as (
          AND dichvuvt_id not in (1,4,7,8,10,11,12)
          AND khoanmuctt_id in (1,5,52,142) -- form 3 
 )
+
 -- Step 2: Main query using the pre-defined CTEs
 , KQ as (
 SELECT
@@ -14,19 +14,19 @@ SELECT
 --        ELSE 'DNHM'
 --    END AS Dinh_nghia,
 pBH,
-    TEN_LOAIHD,
+--    TEN_LOAIHD,
     LOAIHINH_TB ,
     SUM(CASE WHEN tien >0 THEN 1 ELSE 0 END) AS SL_PS_CUOC,
     SUM(CASE WHEN tien+km_lapdat <=0  THEN 1 ELSE 0 END) AS SL_0_PS_CUOC,
     SUM(tien) AS tien_PS,
     SUM(ABS(vat)) AS vat_PS,
     SUM(tien)+SUM(ABS(vat)) tong_PS,
-    SUM(ABS(km_lapdat)) AS tien_KM,
-    SUM(ABS(vat_km)) AS vat_km,
-    SUM(ABS(km_lapdat))+SUM(ABS(vat_km)) tong_KM,
-    SUM(tien) + SUM(km_lapdat) AS tien_thu,
-    SUM(vat) + SUM(vat_km) AS vat_thu,
-    (SUM(vat) + SUM(vat_km)+SUM(tien) + SUM(km_lapdat)) tong_thu,
+--    SUM(ABS(km_lapdat)) AS tien_KM,
+--    SUM(ABS(vat_km)) AS vat_km,
+--    SUM(ABS(km_lapdat))+SUM(ABS(vat_km)) tong_KM,
+--    SUM(tien) + SUM(km_lapdat) AS tien_thu,
+--    SUM(vat) + SUM(vat_km) AS vat_thu,
+--    (SUM(vat) + SUM(vat_km)+SUM(tien) + SUM(km_lapdat)) tong_thu,
      SUM(CASE
             WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202407 THEN tien + km_lapdat
             ELSE 0
@@ -70,7 +70,7 @@ FROM
 
 GROUP BY
 pBH,
-     TEN_LOAIHD,
+--     TEN_LOAIHD,
      LOAIHINH_TB
        
  , CASE
