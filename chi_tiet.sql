@@ -1,4 +1,4 @@
-CREATE TABLE x_onebss AS
+create table onebss_T8 as
 WITH ct AS (
     SELECT 
         khoanmuctt_id,
@@ -30,8 +30,8 @@ dich_vu as (
 ,
 std_onebss AS (
     SELECT 
-       b.tthd_id,b.loaitb_id, a.ma_gd, b.hdtb_id, b.thuebao_id, b.ma_tb, a.loaihd_id, b.kieuld_id, 
-        a.ngay_yc, b.ngay_ht, a.ctv_id, a.nhanviengt_id
+       b.tthd_id,b.loaitb_id, a.ma_gd, b.hdtb_id, b.thuebao_id, b.ma_tb, a.loaihd_id, b.kieuld_id, b.donvi_id donvi_tt_id,
+        a.ngay_yc, b.ngay_ht, a.ctv_id, a.nhanviengt_id, a.nhanvien_id -- xiu xoa a.nhanvien_id,
         , d.ngay_tt,d.ngay_hd, d.seri, d.soseri
         ,c.khoanmuctt_id
         , d.thungan_tt_id, d.ht_tra_id, d.kenhthu_id, d.trangthai, cq.tenchuquan,cq.chuquan_id
@@ -54,14 +54,14 @@ std_onebss AS (
         css_hcm.chuquan cq ON cq.chuquan_id = dvu.chuquan_id
     
     WHERE 
---         -- THANG 6
---         (TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202406
+--         -- THANG 7
+--         (TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202407
 --             or (d.ngay_tt < TRUNC(ADD_MONTHS(SYSDATE, -1), 'MONTH')
 --                     and nvl(ngay_ht, sysdate) >= TRUNC(ADD_MONTHS(SYSDATE, -1), 'MONTH')
 --                 )
 --         )
-      --THANG 7 
-      (TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202407
+      --THANG 8 
+      (TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202408
             or (d.ngay_tt < trunc(sysdate, 'month')
                     and nvl(ngay_ht, sysdate) >= trunc(sysdate, 'month')
                 )
@@ -75,7 +75,9 @@ std_onebss AS (
 x_onebss AS (
     SELECT
         a.tthd_id,a.loaihd_id,a.kieuld_id,a.trangthai,a.khoanmuctt_id,dv.dichvuvt_id,a.loaitb_id, q.loaihinh_tb,a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD,
-        b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht, d.ten_nv, m.ten_dv,s.ten_dv pbh, 
+        b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht
+        , d.ten_nv, m.ten_dv,s.ten_dv pbh, 
+        a.donvi_tt_id,l.ten_dv ten_pb_ttvt,
          a.ngay_tt,a.ngay_hd,a.seri,a.soseri
         , round(sum(a.tien_thu)) tien, round(sum(a.vat_thu)) vat, round(sum(a.km_lapdat)) km_lapdat, round(sum(a.vat_km)) vat_km,
         h.ht_tra, i.KENHTHU, 
@@ -96,6 +98,11 @@ x_onebss AS (
         admin_hcm.donvi m ON d.DONVI_ID = m.DONVI_ID
     LEFT JOIN 
         admin_hcm.donvi s ON m.DONVI_cha_ID = s.DONVI_ID
+        --ttvt
+
+    LEFT JOIN 
+        admin_hcm.donvi l ON l.DONVI_ID = a.donvi_tt_id
+        --
     LEFT JOIN 
         css_hcm.hinhthuc_tra h ON h.ht_tra_id = a.ht_tra_id
     LEFT JOIN 
@@ -104,8 +111,11 @@ x_onebss AS (
         css_hcm.loaihinh_tb q ON q.loaitb_id = a.loaitb_id
      LEFT JOIN 
          css_hcm.dichvu_vt dv on q.dichvuvt_id =dv.dichvuvt_id
+    
      GROUP BY a.tthd_id,a.HDTB_ID,dv.dichvuvt_id,q.loaihinh_tb, a.loaitb_id, a.ma_gd, a.hdtb_id, a.thuebao_id, a.ma_tb, b.MA_LOAIHD, 
-        b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht, d.ten_nv, m.ten_dv,s.ten_dv, 
+        b.TEN_LOAIHD, c.ten_kieuld, a.ngay_yc, a.ngay_ht
+        , d.ten_nv, m.ten_dv,s.ten_dv
+      ,a.donvi_tt_id,l.ten_dv,
        a.ngay_tt,a.ngay_hd,a.seri,a.soseri, h.ht_tra, i.KENHTHU, a.khoanmuctt_id, a.trangthai,a.kieuld_id,a.loaihd_id
        ,
         CASE 
