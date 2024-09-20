@@ -1,3 +1,5 @@
+--Ngay 1 đầu tháng chạy file chi tiết với các bảng online vì nếu để quá mùng 1 thì các TB sẽ xuất hiện ngày thanh toán sau tháng 9? mà trong form thì ko có cột này nên sẽ nhầm tiền
+--
 create table onebss_T8 as
 WITH ct AS (
     SELECT 
@@ -8,24 +10,24 @@ WITH ct AS (
         SUM(tien) tien,
         SUM(vat) vat
 
-    FROM css_hcm.ct_phieutt
+    FROM css.v_ct_phieutt@dataguard
     GROUP BY hdtb_id, phieutt_id, khoanmuctt_id
 )
 ,
 dich_vu as (
-     select thuebao_id,chuquan_id from css_hcm.db_adsl
+     select thuebao_id,chuquan_id from css.v_db_adsl@dataguard
          union all
-    select thuebao_id,chuquan_id from css_hcm.db_cntt 
+    select thuebao_id,chuquan_id from css.v_db_cntt@dataguard
         union all 
-     select thuebao_id,chuquan_id from css_hcm.db_mgwan
+     select thuebao_id,chuquan_id from css.v_db_mgwan@dataguard
         union all 
-     select thuebao_id,chuquan_id from css_hcm.db_IMS 
+     select thuebao_id,chuquan_id from css.v_db_IMS@dataguard
         union all 
-     select thuebao_id,chuquan_id from css_hcm.db_CD
+     select thuebao_id,chuquan_id from css.v_db_CD@dataguard
         union all 
-     select thuebao_id,chuquan_id from css_hcm.db_gp
+     select thuebao_id,chuquan_id from css.v_db_gp@dataguard
         union all 
-    select distinct thuebao_id, chuquan_id from css_hcm.db_tsl
+    select distinct thuebao_id, chuquan_id from css.v_db_tsl@dataguard
 )
 ,
 std_onebss AS (
@@ -41,13 +43,13 @@ std_onebss AS (
         , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.tien ELSE 0 END tien_thu --5 token
         , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.vat ELSE 0 END vat_thu
     FROM 
-        css_hcm.hd_khachhang a
+        ccss.v_hd_khachhang@dataguard a
     LEFT JOIN 
-        css_hcm.hd_thuebao b ON a.hdkh_id = b.hdkh_id
+        css.v_hd_thuebao@dataguard b ON a.hdkh_id = b.hdkh_id
     LEFT JOIN 
         ct c ON b.hdtb_id = c.hdtb_id
     JOIN 
-        css_hcm.phieutt_hd d ON c.phieutt_id = d.phieutt_id AND (c.tien <> 0)
+        css.v_phieutt_hd@dataguard d ON c.phieutt_id = d.phieutt_id AND (c.tien <> 0)
     LEFT JOIN 
         dich_vu dvu on b.thuebao_id = dvu.thuebao_id
     LEFT JOIN 
