@@ -28,7 +28,7 @@ SELECT
                  (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408  or ngay_tt is null )
                 and tenchuquan not LIKE '%Ph_ M_ H_ng%'
                 and trangthai = 1
-                                or (trangthai <> 1 and ngay_tt is not null)
+                                
             THEN tien + km_lapdat
             ELSE 0
         END) AS tien_thu_trong_thang,
@@ -37,7 +37,7 @@ SELECT
                  (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408  or ngay_tt is null )
                 and tenchuquan not LIKE '%Ph_ M_ H_ng%'
                 and trangthai = 1
-                                or (trangthai <> 1 and ngay_tt is not null)
+                                
             THEN vat + vat_km
             ELSE 0
         END) AS vat_thu_trong_thang,
@@ -46,7 +46,7 @@ SELECT
                 (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408  or ngay_tt is null )
                 and tenchuquan not LIKE '%Ph_ M_ H_ng%'
                 and trangthai = 1
-                                or (trangthai <> 1 and ngay_tt is not null)
+                                
             THEN vat + vat_km + tien + km_lapdat
             ELSE 0
         END) AS tong_thu_trong_thang
@@ -72,17 +72,17 @@ SELECT
         END) AS tong_thu_thang_truoc
         ,
          SUM(CASE
-            WHEN (ngay_tt is null or kenhthu is null)  and trangthai = 0
+            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 and ngay_tt is not null)
                 THEN tien + km_lapdat
             ELSE 0
         END) AS tien_thu_chua_thu,
         SUM(CASE
-            WHEN (ngay_tt is null or kenhthu is null)  and trangthai = 0
+            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 and ngay_tt is not null)
             THEN vat + vat_km
             ELSE 0
         END) AS vat_thu_chua_thu,
         SUM(CASE
-            WHEN (ngay_tt is null or kenhthu is null)  and trangthai = 0
+            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 and ngay_tt is not null)
             THEN vat + vat_km + tien + km_lapdat
             ELSE 0
         END) AS tong_thu_chua_thu
