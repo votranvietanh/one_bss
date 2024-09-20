@@ -1,4 +1,3 @@
---Ngay 1 đầu tháng chạy file chi tiết với các bảng online vì nếu để quá mùng 1 thì các TB sẽ xuất hiện ngày thanh toán sau tháng 9? mà trong form thì ko có cột này nên sẽ nhầm tiền
 with x_onebss1 as (
         select * from x_onebss a
         where tthd_id = 6 
