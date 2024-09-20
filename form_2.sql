@@ -1,6 +1,6 @@
 WITH x_onebss1 AS (
     SELECT * 
-    FROM x_onebss a
+    FROM x_onebss_202408 a
     WHERE tthd_id < 6 
       AND trangthai = 1
       AND loaitb_id NOT IN (2116, 147, 39, 290, 175, 122)
