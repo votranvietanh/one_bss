@@ -15,29 +15,29 @@ KQ AS (
         
         -- Tổng thu trong tháng
         SUM(CASE 
-                WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202407 THEN tien + km_lapdat
+                WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408 THEN tien + km_lapdat
                 ELSE 0 
             END) AS tien_thu_trong_thang,
         SUM(CASE 
-                WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202407 THEN vat + vat_km
+                WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408 THEN vat + vat_km
                 ELSE 0 
             END) AS vat_thu_trong_thang,
         SUM(CASE 
-                WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202407 THEN vat + vat_km + tien + km_lapdat
+                WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408 THEN vat + vat_km + tien + km_lapdat
                 ELSE 0 
             END) AS tong_thu_trong_thang,
 
         -- Tổng thu tháng trước
         SUM(CASE 
-                WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202407 AND trangthai = 1 THEN tien + km_lapdat
+                WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202408 AND trangthai = 1 THEN tien + km_lapdat
                 ELSE 0 
             END) AS tien_thu_thang_truoc,
         SUM(CASE 
-                WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202407 AND trangthai = 1 THEN vat + vat_km
+                WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202408 AND trangthai = 1 THEN vat + vat_km
                 ELSE 0 
             END) AS vat_thu_thang_truoc,
         SUM(CASE 
-                WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202407 AND trangthai = 1 THEN vat + vat_km + tien + km_lapdat
+                WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202408 AND trangthai = 1 THEN vat + vat_km + tien + km_lapdat
                 ELSE 0 
             END) AS tong_thu_thang_truoc,
 
