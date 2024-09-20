@@ -1,5 +1,5 @@
 with x_onebss1 as (
-        select * from x_onebss a
+        select * from x_onebss_202408 a
         where tthd_id = 6 
          AND loaitb_id not in (2116,147,39,290,175,122,319,208) -- dk chi Huong+319,208: elearning va eticket
          AND dichvuvt_id not in (1,4,7,8,10,11,12)
