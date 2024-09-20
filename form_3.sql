@@ -28,41 +28,66 @@ pBH,
 --    SUM(vat) + SUM(vat_km) AS vat_thu,
 --    (SUM(vat) + SUM(vat_km)+SUM(tien) + SUM(km_lapdat)) tong_thu,
      SUM(CASE
-            WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202407 THEN tien + km_lapdat
+            WHEN 
+                 (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408  or ngay_tt is null )
+                and tenchuquan not LIKE '%Ph_ M_ H_ng%'
+                and trangthai = 1
+                                or (trangthai <> 1 and ngay_tt is not null)
+            THEN tien + km_lapdat
             ELSE 0
         END) AS tien_thu_trong_thang,
         SUM(CASE
-            WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202407 THEN vat + vat_km
+            WHEN 
+                 (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408  or ngay_tt is null )
+                and tenchuquan not LIKE '%Ph_ M_ H_ng%'
+                and trangthai = 1
+                                or (trangthai <> 1 and ngay_tt is not null)
+            THEN vat + vat_km
             ELSE 0
         END) AS vat_thu_trong_thang,
         SUM(CASE
-            WHEN TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202407 THEN vat + vat_km + tien + km_lapdat
+            WHEN 
+                (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408  or ngay_tt is null )
+                and tenchuquan not LIKE '%Ph_ M_ H_ng%'
+                and trangthai = 1
+                                or (trangthai <> 1 and ngay_tt is not null)
+            THEN vat + vat_km + tien + km_lapdat
             ELSE 0
         END) AS tong_thu_trong_thang
         ,
         SUM(CASE
-            WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202407 and trangthai= 1 THEN tien + km_lapdat
+            WHEN (TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) <> 202408 and trangthai= 1)
+           
+            THEN tien + km_lapdat
             ELSE 0
         END) AS tien_thu_thang_truoc,
         SUM(CASE
-            WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202407 and trangthai= 1 THEN vat + vat_km
+            WHEN (TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) <> 202408 and trangthai= 1)
+            
+            THEN vat + vat_km
             ELSE 0
         END) AS vat_thu_thang_truoc,
         SUM(CASE
-            WHEN TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) < 202407  and trangthai= 1 THEN vat + vat_km + tien + km_lapdat
+            WHEN 
+                (TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) <> 202408  and trangthai= 1)
+
+            THEN vat + vat_km + tien + km_lapdat
             ELSE 0
         END) AS tong_thu_thang_truoc
         ,
          SUM(CASE
-            WHEN ngay_tt is null or kenhthu is null  or TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) > 202407 THEN tien + km_lapdat
+            WHEN (ngay_tt is null or kenhthu is null)  and trangthai = 0
+                THEN tien + km_lapdat
             ELSE 0
         END) AS tien_thu_chua_thu,
         SUM(CASE
-            WHEN ngay_tt is null or kenhthu is null  or TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) > 202407 THEN vat + vat_km
+            WHEN (ngay_tt is null or kenhthu is null)  and trangthai = 0
+            THEN vat + vat_km
             ELSE 0
         END) AS vat_thu_chua_thu,
         SUM(CASE
-            WHEN ngay_tt is null or kenhthu is null or TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) > 202407 THEN vat + vat_km + tien + km_lapdat
+            WHEN (ngay_tt is null or kenhthu is null)  and trangthai = 0
+            THEN vat + vat_km + tien + km_lapdat
             ELSE 0
         END) AS tong_thu_chua_thu
 FROM
