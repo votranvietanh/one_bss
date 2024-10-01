@@ -43,7 +43,7 @@ std_onebss AS (
         , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.tien ELSE 0 END tien_thu --5 token
         , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.vat ELSE 0 END vat_thu
     FROM 
-        ccss.v_hd_khachhang@dataguard a
+        css.v_hd_khachhang@dataguard a
     LEFT JOIN 
         css.v_hd_thuebao@dataguard b ON a.hdkh_id = b.hdkh_id
     LEFT JOIN 
