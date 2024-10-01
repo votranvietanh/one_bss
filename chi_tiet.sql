@@ -63,7 +63,7 @@ std_onebss AS (
 --                 )
 --         )
       --THANG 8 
-      (TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202408
+      (TO_CHAR(b.ngay_ins, 'yyyymm')) = (TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM'))
             or (d.ngay_tt < trunc(sysdate, 'month')
                     and nvl(ngay_ht, sysdate) >= trunc(sysdate, 'month')
                 )
