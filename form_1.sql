@@ -1,7 +1,7 @@
 with x_onebss1 as (
         select * from x_onebss_202408  a
         where a.khoanmuctt_id  in (1,2,3,4,9,17)
-        and a.tthd_id = 6 and dichvuvt_id in (1,4,7,8,10,11,12)
+        and a.tthd_id = 6 and dichvuvt_id in (1,4,7,8,9,10,11,12)
 )
 -- Step 2: Main query using the pre-defined CTEs
 , KQ as (
@@ -26,7 +26,7 @@ SELECT
      SUM(CASE
             WHEN 
                  (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408  or ngay_tt is null )
-                and tenchuquan not LIKE '%Ph_ M_ H_ng%'
+                -- and tenchuquan not LIKE '%Ph_ M_ H_ng%'
                 and trangthai = 1
                                 
             THEN tien + km_lapdat
@@ -35,7 +35,7 @@ SELECT
         SUM(CASE
             WHEN 
                  (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408  or ngay_tt is null )
-                and tenchuquan not LIKE '%Ph_ M_ H_ng%'
+                -- and tenchuquan not LIKE '%Ph_ M_ H_ng%'
                 and trangthai = 1
                                 
             THEN vat + vat_km
@@ -44,7 +44,7 @@ SELECT
         SUM(CASE
             WHEN 
                 (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202408  or ngay_tt is null )
-                and tenchuquan not LIKE '%Ph_ M_ H_ng%'
+                -- and tenchuquan not LIKE '%Ph_ M_ H_ng%'
                 and trangthai = 1
                                 
             THEN vat + vat_km + tien + km_lapdat
@@ -72,17 +72,17 @@ SELECT
         END) AS tong_thu_thang_truoc
         ,
          SUM(CASE
-            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 and ngay_tt is not null)
+            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 )
                 THEN tien + km_lapdat
             ELSE 0
         END) AS tien_thu_chua_thu,
         SUM(CASE
-            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 and ngay_tt is not null)
+            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 )
             THEN vat + vat_km
             ELSE 0
         END) AS vat_thu_chua_thu,
         SUM(CASE
-            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 and ngay_tt is not null)
+            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 )
             THEN vat + vat_km + tien + km_lapdat
             ELSE 0
         END) AS tong_thu_chua_thu
