@@ -72,17 +72,17 @@ SELECT
         END) AS tong_thu_thang_truoc
         ,
          SUM(CASE
-            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 )
+            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai IS NULL OR trangthai <> 1)
                 THEN tien + km_lapdat
             ELSE 0
         END) AS tien_thu_chua_thu,
         SUM(CASE
-            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 )
+            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai IS NULL OR trangthai <> 1)
             THEN vat + vat_km
             ELSE 0
         END) AS vat_thu_chua_thu,
         SUM(CASE
-            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai <> 1 )
+            WHEN ((ngay_tt is null or kenhthu is null)  and trangthai = 0)or (trangthai IS NULL OR trangthai <> 1)
             THEN vat + vat_km + tien + km_lapdat
             ELSE 0
         END) AS tong_thu_chua_thu
