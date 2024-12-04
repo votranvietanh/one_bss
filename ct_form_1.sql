@@ -1,4 +1,6 @@
 select a.LOAIHINH_TB, a.MA_GD, a.HDTB_ID, a.THUEBAO_ID, a.MA_TB,c.ten_kh, a.MA_LOAIHD, a.TEN_LOAIHD, a.TEN_KIEULD, a.NGAY_YC, a.NGAY_HT, a.TEN_NV, a.TEN_DV, a.PBH, a.DONVI_TT_ID, a.TEN_PB_TTVT, a.NGAY_TT, a.NGAY_HD, a.SERI, a.SOSERI, 
+ a.TIEN, a.VAT
+,a.TIEN+a.VAT tong_ps,
  (CASE
             WHEN 
                  (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202411  or ngay_tt is null )
