@@ -66,9 +66,9 @@ select a.LOAIHINH_TB, a.MA_GD, a.HDTB_ID, a.THUEBAO_ID, a.MA_TB,c.ten_kh, a.MA_L
         END) AS tong_thu_chua_thu,
 a.KM_LAPDAT, a.VAT_KM, a.HT_TRA,  a.KENHTHU, a.TRANGTHAI_TT, a.TENCHUQUAN, a.CHUQUAN_ID ,
   case
-            when tenchuquan LIKE '%Ph_ M_ H_ng%' then 'Phu My Hung'
-        when dichvuvt_id in (7,8,9) then 'TSL'
-        when dichvuvt_id in (1,11,4,12,10 ) then'CD'
+            when a.tenchuquan LIKE '%Ph_ M_ H_ng%' then 'Phu My Hung'
+        when a.dichvuvt_id in (7,8,9) then 'TSL'
+        when a.dichvuvt_id in (1,11,4,12,10 ) then'CDBR'
      end as dich_vu
 from ttkdhcm_ktnv.baocao_doanhthu_dongtien_pktkh a
 left join css_hcm.db_thuebao b on a.thuebao_id = b.thuebao_id
