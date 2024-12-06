@@ -69,7 +69,7 @@ from ttkdhcm_ktnv.baocao_doanhthu_dongtien_pktkh a
 left join css_hcm.db_thuebao b on a.thuebao_id = b.thuebao_id
 left join css_hcm.db_khachhang c on b.KHACHHANG_ID =c.KHACHHANG_ID
 where a.thang = 202411 and       a.tthd_id = 6 
-         AND a.loaitb_id not in (2116,147,39,290,175,122,319,208) -- dk chi Huong+319,208: elearning va eticket
+         AND a.loaitb_id not in (2116,147,39,290,175,122,319,208,373,288) -- dk chi Huong+319,208: elearning va eticket
          AND a.dichvuvt_id not in (1,4,7,8,9,10,11,12)
          AND a.khoanmuctt_id in (1,5,52,142)
          ;
