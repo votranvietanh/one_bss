@@ -1,7 +1,7 @@
 with x_onebss1 as (
         select * from x_onebss_202408 a
         where tthd_id = 6 
-         AND loaitb_id not in (2116,147,39,290,175,122,319,208) -- dk chi Huong+319,208: elearning va eticket
+         AND loaitb_id not in (2116,147,39,290,175,122,319,208,373,288) -- dk chi Huong+319,208: elearning va eticket
          AND dichvuvt_id not in (1,4,7,8,10,11,12)
          AND khoanmuctt_id in (1,5,52,142) -- form 3 
 )
