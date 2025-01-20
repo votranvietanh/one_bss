@@ -66,6 +66,7 @@ std_onebss AS (
       ((TO_CHAR(b.ngay_ins, 'yyyymm')) = (TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM'))
             or (d.ngay_tt < trunc(sysdate, 'month')
                     and nvl(ngay_ht, sysdate) >= trunc(sysdate, 'month')
+                    and (TO_CHAR(b.ngay_ins, 'yyyymm')) = (TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM')
                 )
         )
         AND b.donvi_id IS NOT NULL
