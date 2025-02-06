@@ -56,23 +56,17 @@ std_onebss AS (
         css_hcm.chuquan cq ON cq.chuquan_id = dvu.chuquan_id
     
     WHERE 
---         -- THANG 7
---         (TO_NUMBER(TO_CHAR(b.ngay_ins, 'yyyymm')) = 202407
---             or (d.ngay_tt < TRUNC(ADD_MONTHS(SYSDATE, -1), 'MONTH')
---                     and nvl(ngay_ht, sysdate) >= TRUNC(ADD_MONTHS(SYSDATE, -1), 'MONTH')
---                 )
---         )
-      --THANG 8 
-      ((TO_CHAR(b.ngay_ins, 'yyyymm')) = (TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM'))
-            or (d.ngay_tt < trunc(sysdate, 'month')
+      (
+        TO_CHAR(b.ngay_ins, 'yyyymm') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM')
+            or (
+                    d.ngay_tt < trunc(sysdate, 'month')
                     and nvl(ngay_ht, sysdate) >= trunc(sysdate, 'month')
-                    and (TO_CHAR(b.ngay_ins, 'yyyymm')) = (TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM')
-                )
+                    and TO_CHAR(b.ngay_ins, 'yyyymm') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM')
+            )
         )
         AND b.donvi_id IS NOT NULL
         AND dvu.chuquan_id in (145,264,266)
         AND b.tthd_id in (2,3,4,5,6)
-
 )
 ,
 x_onebss AS (
