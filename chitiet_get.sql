@@ -63,7 +63,7 @@ std_onebss AS (
         AND TO_CHAR(b.ngay_ins, 'YYYYMM') = TO_CHAR(ADD_MONTHS(TO_DATE('01/02/2025', 'DD/MM/YYYY'), -1), 'YYYYMM') -- Điều kiện 2.3
     )
 )
-AND b.donvi_id IS NOT NULL -- Điều kiện 3
+-- AND b.donvi_id IS NOT NULL -- Điều kiện 3
 AND dvu.chuquan_id IN (145, 264, 266) -- Điều kiện 4
 AND b.tthd_id IN (2, 3, 4, 5, 6) -- Điều kiện 5
 )
