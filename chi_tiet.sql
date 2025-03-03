@@ -64,7 +64,7 @@ std_onebss AS (
                     and TO_CHAR(b.ngay_ins, 'yyyymm') = TO_CHAR(ADD_MONTHS(SYSDATE, -1), 'YYYYMM')
             )
         )
-        AND b.donvi_id IS NOT NULL
+        -- AND b.donvi_id IS NOT NULL
         AND dvu.chuquan_id in (145,264,266)
         AND b.tthd_id in (2,3,4,5,6)
 )
