@@ -67,7 +67,7 @@ select * from (select a.LOAITB_ID,a.LOAIHINH_TB,a.khoanmuctt_id, a.MA_GD, a.HDTB
         from ttkdhcm_ktnv.baocao_doanhthu_dongtien_pktkh a
         left join css_hcm.db_thuebao b on a.thuebao_id = b.thuebao_id
         left join css_hcm.db_khachhang c on b.KHACHHANG_ID =c.KHACHHANG_ID
-        where a.thang = 202501 and a.khoanmuctt_id  in (1,2,3,4,9,17)
+        where a.thang = 202501 and a.khoanmuctt_id  in (1,2,3,4,9,17,29)
                 and a.tthd_id = 6 and a.dichvuvt_id in (1,4,7,8,9,10,11,12)
                 and a.ma_tb in(select ma_tb from onebss_202501)
                 )
