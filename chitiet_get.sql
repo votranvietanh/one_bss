@@ -1,4 +1,4 @@
-create table onebss_202501 as 
+create table onebss_202504 as 
 WITH ct AS (
     SELECT 
         khoanmuctt_id,
@@ -56,11 +56,11 @@ std_onebss AS (
     WHERE 
       
  (
-    TO_CHAR(b.ngay_ins, 'YYYYMM') = TO_CHAR(ADD_MONTHS(TO_DATE('01/02/2025', 'DD/MM/YYYY'), -1), 'YYYYMM') -- Điều kiện 1
+    TO_CHAR(b.ngay_ins, 'YYYYMM') = TO_CHAR(ADD_MONTHS(TO_DATE('01/05/2025', 'DD/MM/YYYY'), -1), 'YYYYMM') -- Điều kiện 1
     OR (
-        d.ngay_tt < TRUNC(TO_DATE('01/02/2025', 'DD/MM/YYYY'), 'MONTH') -- Điều kiện 2.1
-        AND NVL(ngay_ht, TO_DATE('01/02/2025', 'DD/MM/YYYY')) >= TRUNC(TO_DATE('01/02/2025', 'DD/MM/YYYY'), 'MONTH') -- Điều kiện 2.2
-        AND TO_CHAR(b.ngay_ins, 'YYYYMM') = TO_CHAR(ADD_MONTHS(TO_DATE('01/02/2025', 'DD/MM/YYYY'), -1), 'YYYYMM') -- Điều kiện 2.3
+        d.ngay_tt < TRUNC(TO_DATE('01/05/2025', 'DD/MM/YYYY'), 'MONTH') -- Điều kiện 2.1
+        AND NVL(ngay_ht, TO_DATE('01/05/2025', 'DD/MM/YYYY')) >= TRUNC(TO_DATE('01/05/2025', 'DD/MM/YYYY'), 'MONTH') -- Điều kiện 2.2
+        AND TO_CHAR(b.ngay_ins, 'YYYYMM') = TO_CHAR(ADD_MONTHS(TO_DATE('01/05/2025', 'DD/MM/YYYY'), -1), 'YYYYMM') -- Điều kiện 2.3
     )
 )
 -- AND b.donvi_id IS NOT NULL -- Điều kiện 3
