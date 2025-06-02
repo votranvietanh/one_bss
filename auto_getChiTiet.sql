@@ -2,7 +2,7 @@ SELECT TO_CHAR(TO_NUMBER(SUBSTR('202512', 5, 2)) + 1, 'FM00') AS result
 FROM dual;
 
 
-CREATE OR REPLACE PROCEDURE create_onebss_table IS
+CREATE OR REPLACE PROCEDURE create_onebss_table AUTHID CURRENT_USER IS
     v_date DATE := TRUNC(SYSDATE, 'MM');
     v_yyyymm VARCHAR2(6) := TO_CHAR(TRUNC(SYSDATE, 'MM'), 'YYYYMM');
     v_sql   CLOB;
