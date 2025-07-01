@@ -2,8 +2,8 @@ select * from (select a.LOAITB_ID,a.LOAIHINH_TB,a.khoanmuctt_id, a.MA_GD, a.HDTB
         ,a.TIEN+a.VAT tong_ps,
          (CASE
                     WHEN 
-                         (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202501  or ngay_tt is null )
-                        and tenchuquan not LIKE '%Ph_ M_ H_ng%'
+                         (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202506  or ngay_tt is null )
+                        and nvl(chuquan_id,0) <> 264
                         and trangthai = 1
 
                     THEN tien + km_lapdat
@@ -11,8 +11,8 @@ select * from (select a.LOAITB_ID,a.LOAIHINH_TB,a.khoanmuctt_id, a.MA_GD, a.HDTB
                 END) AS tien_thu_trong_thang,
                 (CASE
                     WHEN 
-                         (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202501  or ngay_tt is null )
-                        and tenchuquan not LIKE '%Ph_ M_ H_ng%'
+                         (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202506  or ngay_tt is null )
+                        and nvl(chuquan_id,0) <> 264
                         and trangthai = 1
 
                     THEN vat + vat_km
@@ -20,8 +20,8 @@ select * from (select a.LOAITB_ID,a.LOAIHINH_TB,a.khoanmuctt_id, a.MA_GD, a.HDTB
                 END) AS vat_thu_trong_thang,
                 (CASE
                     WHEN 
-                        (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202501  or ngay_tt is null )
-                        and tenchuquan not LIKE '%Ph_ M_ H_ng%'
+                        (TO_NUMBER(TO_CHAR(NGAY_TT, 'YYYYMM')) = 202506  or ngay_tt is null )
+                        and nvl(chuquan_id,0) <> 264
                         and trangthai = 1
 
                     THEN vat + vat_km + tien + km_lapdat
@@ -29,20 +29,20 @@ select * from (select a.LOAITB_ID,a.LOAIHINH_TB,a.khoanmuctt_id, a.MA_GD, a.HDTB
                 END) AS tong_thu_trong_thang
                 ,
                 (CASE
-                    WHEN (TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) <> 202501 and trangthai= 1)
+                    WHEN (TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) <> 202506 and trangthai= 1)
 
                     THEN tien + km_lapdat
                     ELSE 0
                 END) AS tien_thu_thang_truoc,
                 (CASE
-                    WHEN (TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) <> 202501 and trangthai= 1)
+                    WHEN (TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) <> 202506 and trangthai= 1)
 
                     THEN vat + vat_km
                     ELSE 0
                 END) AS vat_thu_thang_truoc,
                 (CASE
                     WHEN 
-                        (TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) <> 202501  and trangthai= 1)
+                        (TO_NUMBER(TO_CHAR(ngay_tt, 'YYYYMM')) <> 202506  and trangthai= 1)
 
                     THEN vat + vat_km + tien + km_lapdat
                     ELSE 0
@@ -67,8 +67,8 @@ select * from (select a.LOAITB_ID,a.LOAIHINH_TB,a.khoanmuctt_id, a.MA_GD, a.HDTB
         from ttkdhcm_ktnv.baocao_doanhthu_dongtien_pktkh a
         left join css_hcm.db_thuebao b on a.thuebao_id = b.thuebao_id
         left join css_hcm.db_khachhang c on b.KHACHHANG_ID =c.KHACHHANG_ID
-        where a.thang = 202501 and a.khoanmuctt_id  in (1,2,3,4,9,17,29)
+        where a.thang = 202506 and a.khoanmuctt_id  in (1,2,3,4,9,17,29)
                 and a.tthd_id = 6 and a.dichvuvt_id in (1,4,7,8,9,10,11,12)
-                and a.ma_tb in(select ma_tb from onebss_202501)
+                and a.ma_tb in(select ma_tb from vietanhvh.onebss_202506)
                 )
                 ;
