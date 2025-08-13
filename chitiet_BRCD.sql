@@ -71,7 +71,7 @@ select * from (select a.LOAITB_ID,a.LOAIHINH_TB,a.khoanmuctt_id, a.MA_GD, a.HDTB
                 and a.tthd_id = 6 and a.dichvuvt_id in (1,4,7,8,9,10,11,12)
                 and a.ma_tb in(select ma_tb from vietanhvh.onebss_202507)
                 and hdtb_id not in (select hdtb_id from css_hcm.hdtb_dungthu 
-                                    where to_number(to_char(NGAY_BD,'yyyymm'))= 202507
+                                    where to_number(to_char(NGAY_BD,'yyyymm'))= 202507 and trangthai <> 0
                 )
                 )
                 ;
