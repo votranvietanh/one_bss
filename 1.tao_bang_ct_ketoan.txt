@@ -1,0 +1,217 @@
+--tao hcm
+create table onebss_t10_HCM as 
+WITH ct AS (
+    SELECT 
+        khoanmuctt_id,
+        hdtb_id, phieutt_id       
+        , SUM(tien) tien
+        , SUM(vat) vat
+    FROM css.v_ct_phieutt@dataguard
+    where phanvung_id = 28 and TIEN <> 0 
+    GROUP BY hdtb_id, khoanmuctt_id, phieutt_id
+)
+,
+dich_vu as (
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_adsl@dataguard where phanvung_id = 28
+         union all
+    select thuebao_id,chuquan_id,phanvung_id from css.v_db_cntt@dataguard where phanvung_id = 28
+       union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_tsl@dataguard where phanvung_id = 28 and daucuoi_id = 1
+        union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_mgwan@dataguard where phanvung_id = 28
+        union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_IMS@dataguard where phanvung_id = 28
+        union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_CD@dataguard where phanvung_id = 28
+   
+)
+,
+std_onebss AS (
+    SELECT  
+         b.phanvung_id,b.tthd_id,b.loaitb_id, a.ma_gd, b.hdtb_id, b.thuebao_id, b.ma_tb,dbkh.ten_kh, a.loaihd_id, b.kieuld_id, nv.ten_nv, m.ten_dv,s.ten_dv pbh, 
+        b.donvi_id donvi_tt_id ,l.ten_dv ten_pb_ttvt,
+        a.ngay_yc, b.ngay_ht, a.ctv_id, a.nhanviengt_id, a.nhanvien_id -- xiu xoa a.nhanvien_id,
+        , d.ngay_tt,d.ngay_hd, d.seri, d.soseri
+        ,c.khoanmuctt_id
+        , d.thungan_tt_id, d.ht_tra_id, d.kenhthu_id, d.trangthai, cq.tenchuquan,cq.chuquan_id,dvu.chuquan_id
+        
+        , CASE WHEN c.khoanmuctt_id = 19 THEN c.tien ELSE 0 END km_lapdat
+        , CASE WHEN c.khoanmuctt_id = 19 THEN c.vat ELSE 0 END vat_km
+        , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.tien ELSE 0 END tien_thu --5 token
+        , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.vat ELSE 0 END vat_thu
+
+    FROM 
+       css.v_hd_khachhang@dataguard  a
+    LEFT JOIN 
+       css.v_hd_thuebao@dataguard  b ON a.hdkh_id = b.hdkh_id and a.phanvung_id = b.phanvung_id
+    LEFT JOIN 
+        ct c ON b.hdtb_id = c.hdtb_id
+    left join css.v_db_thuebao@dataguard_VTU dbtb on dbtb.thuebao_id = b.thuebao_id
+    left join css.v_db_khachhang@dataguard_VTU dbkh on dbtb.KHACHHANG_ID =dbkh.KHACHHANG_ID
+    JOIN 
+       css.v_phieutt_hd@dataguard  d ON c.phieutt_id = d.phieutt_id AND (c.tien <> 0)
+    LEFT JOIN 
+        dich_vu dvu on b.thuebao_id = dvu.thuebao_id and dvu.phanvung_id = a.phanvung_id
+    LEFT JOIN 
+        css.v_chuquan@dataguard cq ON cq.chuquan_id = dvu.chuquan_id
+    LEFT JOIN 
+        admin.v_nhanvien@dataguard nv ON nv.nhanvien_id = a.ctv_id 
+    LEFT JOIN 
+        admin.v_donvi@dataguard m ON nv.DONVI_ID = m.DONVI_ID
+    LEFT JOIN 
+        admin.v_donvi@dataguard s ON m.DONVI_cha_ID = s.DONVI_ID
+        --ttvt
+    LEFT JOIN 
+        admin.v_donvi@dataguard l ON l.DONVI_ID = b.donvi_id
+    WHERE a.phanvung_id = 28 -- and rownum <=10 
+      and (TO_CHAR(b.ngay_ht, 'yyyymm') = '202510')
+        AND dvu.chuquan_id in (145,264,266  ,119,125)
+        AND b.tthd_id in (2,3,4,5,6)
+) select * from std_onebss;
+
+
+--
+
+
+create table onebss_t10_BDG as 
+WITH ct AS (
+    SELECT 
+        khoanmuctt_id,
+        hdtb_id, phieutt_id       
+        , SUM(tien) tien
+        , SUM(vat) vat
+    FROM css.v_ct_phieutt@dataguard_BDG
+    where phanvung_id = 8 and TIEN <> 0 --and hdtb_id = 3765507
+    GROUP BY hdtb_id, khoanmuctt_id, phieutt_id
+)
+,
+dich_vu as (
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_adsl@dataguard_BDG where phanvung_id = 8
+         union all
+    select thuebao_id,chuquan_id,phanvung_id from css.v_db_cntt@dataguard_BDG where phanvung_id = 8
+       union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_tsl@dataguard_BDG where phanvung_id = 8 and daucuoi_id = 1
+        union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_mgwan@dataguard_BDG where phanvung_id = 8
+        union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_IMS@dataguard_BDG where phanvung_id = 8
+        union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_CD@dataguard_BDG where phanvung_id = 8
+   
+)
+,
+std_onebss AS (
+    SELECT  
+         b.phanvung_id,b.tthd_id,b.loaitb_id, a.ma_gd, b.hdtb_id, b.thuebao_id, b.ma_tb,dbkh.ten_kh, a.loaihd_id, b.kieuld_id, nv.ten_nv, m.ten_dv,s.ten_dv pbh, 
+        b.donvi_id donvi_tt_id ,l.ten_dv ten_pb_ttvt,
+        a.ngay_yc, b.ngay_ht, a.ctv_id, a.nhanviengt_id, a.nhanvien_id -- xiu xoa a.nhanvien_id,
+        , d.ngay_tt,d.ngay_hd, d.seri, d.soseri
+        ,c.khoanmuctt_id
+        , d.thungan_tt_id, d.ht_tra_id, d.kenhthu_id, d.trangthai, cq.tenchuquan,cq.chuquan_id,dvu.chuquan_id
+        
+        , CASE WHEN c.khoanmuctt_id = 19 THEN c.tien ELSE 0 END km_lapdat
+        , CASE WHEN c.khoanmuctt_id = 19 THEN c.vat ELSE 0 END vat_km
+        , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.tien ELSE 0 END tien_thu --5 token
+        , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.vat ELSE 0 END vat_thu
+
+    FROM 
+       css.v_hd_khachhang@dataguard_BDG  a
+    LEFT JOIN 
+       css.v_hd_thuebao@dataguard_BDG  b ON a.hdkh_id = b.hdkh_id and a.phanvung_id = b.phanvung_id
+    LEFT JOIN 
+        ct c ON b.hdtb_id = c.hdtb_id
+    left join css.v_db_thuebao@dataguard_BDG dbtb on dbtb.thuebao_id = b.thuebao_id
+    left join css.v_db_khachhang@dataguard_BDG dbkh on dbtb.KHACHHANG_ID =dbkh.KHACHHANG_ID
+    JOIN 
+       css.v_phieutt_hd@dataguard_BDG  d ON c.phieutt_id = d.phieutt_id AND (c.tien <> 0)
+    LEFT JOIN 
+        dich_vu dvu on b.thuebao_id = dvu.thuebao_id and dvu.phanvung_id = a.phanvung_id
+    LEFT JOIN 
+        css.v_chuquan@dataguard_BDG cq ON cq.chuquan_id = dvu.chuquan_id
+    LEFT JOIN 
+        admin.v_nhanvien@dataguard_BDG nv ON nv.nhanvien_id = a.ctv_id 
+    LEFT JOIN 
+        admin.v_donvi@dataguard_BDG m ON nv.DONVI_ID = m.DONVI_ID
+    LEFT JOIN 
+        admin.v_donvi@dataguard_BDG s ON m.DONVI_cha_ID = s.DONVI_ID
+        --ttvt
+    LEFT JOIN 
+        admin.v_donvi@dataguard_BDG l ON l.DONVI_ID = b.donvi_id
+    WHERE a.phanvung_id = 8  
+      and (TO_CHAR(b.ngay_ht, 'yyyymm') = '202510')
+        AND dvu.chuquan_id in (145,264,266  ,119,125)
+        AND b.tthd_id in (2,3,4,5,6)
+) select * from std_onebss;
+;
+
+
+create table onebss_t10_VTU as 
+WITH ct AS (
+    SELECT 
+        khoanmuctt_id,
+        hdtb_id, phieutt_id       
+        , SUM(tien) tien
+        , SUM(vat) vat
+    FROM css.v_ct_phieutt@dataguard_VTU
+    where phanvung_id = 2 and TIEN <> 0 --and hdtb_id = 3765507
+    GROUP BY hdtb_id, khoanmuctt_id, phieutt_id
+)
+,
+dich_vu as (
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_adsl@dataguard_VTU where phanvung_id = 2
+         union all
+    select thuebao_id,chuquan_id,phanvung_id from css.v_db_cntt@dataguard_VTU where phanvung_id = 2
+       union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_tsl@dataguard_VTU where phanvung_id = 2 and daucuoi_id = 1
+        union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_mgwan@dataguard_VTU where phanvung_id = 2
+        union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_IMS@dataguard_VTU where phanvung_id = 2
+        union all 
+     select thuebao_id,chuquan_id,phanvung_id from css.v_db_CD@dataguard_VTU where phanvung_id = 2
+   
+)
+,
+std_onebss AS (
+    SELECT  
+         b.phanvung_id,b.tthd_id,b.loaitb_id, a.ma_gd, b.hdtb_id, b.thuebao_id, b.ma_tb,dbkh.ten_kh, a.loaihd_id, b.kieuld_id, nv.ten_nv, m.ten_dv,s.ten_dv pbh, 
+        b.donvi_id donvi_tt_id ,l.ten_dv ten_pb_ttvt,
+        a.ngay_yc, b.ngay_ht, a.ctv_id, a.nhanviengt_id, a.nhanvien_id -- xiu xoa a.nhanvien_id,
+        , d.ngay_tt,d.ngay_hd, d.seri, d.soseri
+        ,c.khoanmuctt_id
+        , d.thungan_tt_id, d.ht_tra_id, d.kenhthu_id, d.trangthai, cq.tenchuquan,cq.chuquan_id,dvu.chuquan_id
+        
+        , CASE WHEN c.khoanmuctt_id = 19 THEN c.tien ELSE 0 END km_lapdat
+        , CASE WHEN c.khoanmuctt_id = 19 THEN c.vat ELSE 0 END vat_km
+        , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.tien ELSE 0 END tien_thu --5 token
+        , CASE WHEN c.khoanmuctt_id NOT IN (19) THEN c.vat ELSE 0 END vat_thu
+
+    FROM 
+       css.v_hd_khachhang@dataguard_VTU  a
+    LEFT JOIN 
+       css.v_hd_thuebao@dataguard_VTU  b ON a.hdkh_id = b.hdkh_id and a.phanvung_id = b.phanvung_id
+    LEFT JOIN 
+        ct c ON b.hdtb_id = c.hdtb_id
+	    left join css.v_db_thuebao@dataguard_VTU dbtb on dbtb.thuebao_id = b.thuebao_id
+    left join css.v_db_khachhang@dataguard_VTU dbkh on dbtb.KHACHHANG_ID =dbkh.KHACHHANG_ID 
+    JOIN 
+       css.v_phieutt_hd@dataguard_VTU  d ON c.phieutt_id = d.phieutt_id AND (c.tien <> 0)
+    LEFT JOIN 
+        dich_vu dvu on b.thuebao_id = dvu.thuebao_id and dvu.phanvung_id = a.phanvung_id
+    LEFT JOIN 
+        css.v_chuquan@dataguard_VTU cq ON cq.chuquan_id = dvu.chuquan_id
+    LEFT JOIN 
+        admin.v_nhanvien@dataguard_VTU nv ON nv.nhanvien_id = a.ctv_id 
+    LEFT JOIN 
+        admin.v_donvi@dataguard_VTU m ON nv.DONVI_ID = m.DONVI_ID
+    LEFT JOIN 
+        admin.v_donvi@dataguard_VTU s ON m.DONVI_cha_ID = s.DONVI_ID
+        --ttvt
+    LEFT JOIN 
+        admin.v_donvi@dataguard_VTU l ON l.DONVI_ID = b.donvi_id
+    WHERE a.phanvung_id = 2
+      and (TO_CHAR(b.ngay_ht, 'yyyymm') = '202510')
+        AND dvu.chuquan_id in (145,264,266  ,119,125)
+        AND b.tthd_id in (2,3,4,5,6)
+) select * from std_onebss;
+;
